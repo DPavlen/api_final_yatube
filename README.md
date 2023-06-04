@@ -6,9 +6,9 @@
 **Установка**
 **Как запустить проект:**
 
-Клонировать репозиторий и перейти в него в командной строке:[^1]
-git clone git@github.com:yandex-praktikum/api_final_yatube.git[^2]
-cd kittygram[^3]
+Клонировать репозиторий и перейти в него в командной строке:[^1].
+git clone git@github.com:yandex-praktikum/api_final_yatube.git[^2].
+cd kittygram[^3].
 
 Cоздать и активировать виртуальное окружение:
 python3 -m venv env
