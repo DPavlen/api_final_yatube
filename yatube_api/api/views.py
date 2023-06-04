@@ -14,7 +14,6 @@ class GroupViewSet(ReadOnlyModelViewSet):
 
 class PostViewSet(ModelViewSet):
     """Доступ: Аутентификация. Автор редактирует или только чтение."""
-
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
@@ -24,8 +23,7 @@ class PostViewSet(ModelViewSet):
 
 
 class CommentsViewSet(ModelViewSet):
-    """Доступ: Аутентификация."""
-
+    """Доступ к комментариям: Аутентификация."""
     serializer_class = CommentsSerializer
     permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
@@ -38,3 +36,8 @@ class CommentsViewSet(ModelViewSet):
         """Cоздание комментария к посту."""
         post = get_object_or_404(Post, pk=self.kwargs.get("post_id"))
         serializer.save(author=self.request.user, post=post)
+
+
+class CommentsViewSet(ModelViewSet):
+    """Доступ: Аутентификация."""
+    pass
