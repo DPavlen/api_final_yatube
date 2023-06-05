@@ -4,7 +4,6 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from api.permissions import IsAuthorOrReadOnly
 from api.serializers import (CommentsSerializer, FollowSerializer,
@@ -12,26 +11,26 @@ from api.serializers import (CommentsSerializer, FollowSerializer,
 from posts.models import Group, Post
 
 
-class GroupViewSet(ReadOnlyModelViewSet):
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(viewsets.ModelViewSet):
     """Доступ: Аутентификация. Автор редактирует или только чтение."""
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitOffsetPagination
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
 
-class CommentsViewSet(ModelViewSet):
+class CommentsViewSet(viewsets.ModelViewSet):
     """Доступ к комментариям: Аутентификация."""
     serializer_class = CommentsSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """Переопределяем метод представления get_queryset."""
