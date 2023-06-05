@@ -42,7 +42,7 @@ class Comment(models.Model):
         related_name='comments')
     post = models.ForeignKey(
         Post,
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
         related_name='comments')
     text = models.TextField()
     created = models.DateTimeField(
