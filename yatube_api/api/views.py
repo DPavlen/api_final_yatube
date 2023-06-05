@@ -38,6 +38,6 @@ class CommentsViewSet(ModelViewSet):
         serializer.save(author=self.request.user, post=post)
 
 
-class CommentsViewSet(ModelViewSet):
+class FollowViewSet(ModelViewSet):
     """Доступ: Аутентификация."""
     pass
