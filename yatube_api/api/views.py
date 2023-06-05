@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import mixins
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
@@ -44,14 +43,9 @@ class CommentViewSet(viewsets.ModelViewSet):
         return post.comments.all()
 
 
-class CreateFollowsViewSet(mixins.CreateModelMixin,
-                           mixins.ListModelMixin,
-                           viewsets.GenericViewSet):
-    """Создадим список фолловеров."""
-    pass
-
-
-class FollowViewSet(CreateFollowsViewSet):
+class FollowViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    viewsets.GenericViewSet):
     """Доступ: Аутентификация."""
     serializer_class = FollowSerializer
     permission_classes = (IsAuthenticated,)
