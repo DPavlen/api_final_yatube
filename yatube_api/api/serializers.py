@@ -1,12 +1,8 @@
-from django.contrib.auth import get_user_model
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.relations import SlugRelatedField
 
-
-from posts.models import Comment, Follow, Group, Post
-
-
-User = get_user_model()
+from posts.models import Comment, Follow, Group, Post, User
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -35,15 +31,27 @@ class CommentsSerializer(serializers.ModelSerializer):
 
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
+        read_only=True,
         slug_field='username',
         default=serializers.CurrentUserDefault()
     )
     following = serializers.SlugRelatedField(
-        queryset=User.objects.all(),
-        slug_field='username'
+        queryset=User.objects.all(), slug_field='username'
     )
 
     class Meta:
         model = Follow
-        fields = ('user', 'following')
+        fields = '__all__'
+        validators = (
+            UniqueTogetherValidator(
+                queryset=Follow.objects.all(),
+                fields=('user', 'following')
+            ),
+        )
+
+        def validate_following(self, current_auhtor):
+            """Проверка подписки."""
+            if self.context['request'].user == current_auhtor:
+                raise serializers.ValidationError(
+                    'Подписываться на самого себя НЕЛЬЗЯ!')
+            return current_auhtor
